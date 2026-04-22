@@ -22,6 +22,8 @@
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
+      .nav-wrap { padding: 0 16px !important; }
+      .nav-pill { padding: 8px 14px !important; border-radius: 20px !important; }
       .diensten-grid { grid-template-columns: 1fr !important; }
       .diensten-item-inner { padding-left: 0 !important; border-left: none !important; padding-right: 0 !important; }
       .overview-outer { grid-template-columns: 1fr !important; gap: 0 !important; }
@@ -129,8 +131,8 @@
     /* ─── NAVBAR ─── */
     function NavBar({ lang, setLang }) {
       return (
-        <div style={{ position: 'fixed', top: 16, left: 0, right: 0, zIndex: 200, display: 'flex', justifyContent: 'center', padding: '0 28px', pointerEvents: 'none' }}>
-          <nav style={{
+        <div className="nav-wrap" style={{ position: 'fixed', top: 16, left: 0, right: 0, zIndex: 200, display: 'flex', justifyContent: 'center', padding: '0 28px', pointerEvents: 'none' }}>
+          <nav className="nav-pill" style={{
             pointerEvents: 'all', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             width: '100%',
             background: 'rgba(191,191,191,0.45)',
