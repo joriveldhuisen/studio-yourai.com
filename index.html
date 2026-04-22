@@ -19,6 +19,21 @@
       padding-top: 76px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .diensten-grid { grid-template-columns: 1fr !important; }
+      .diensten-item-inner { padding-left: 0 !important; border-left: none !important; padding-right: 0 !important; }
+      .overview-outer { grid-template-columns: 1fr !important; gap: 0 !important; }
+      .overview-label-col { display: none; }
+      .overview-row { grid-template-columns: 1fr !important; }
+      .overview-photo { display: none; }
+      .case-meta { grid-template-columns: 1fr !important; }
+      .case-stat { align-items: flex-start !important; flex-direction: row !important; gap: 8px !important; align-items: baseline !important; }
+      .n8n-outer { overflow-x: auto; }
+      .n8n-inner { min-width: 700px; }
+      .nav-menu-label { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -114,10 +129,10 @@
     /* ─── NAVBAR ─── */
     function NavBar({ lang, setLang }) {
       return (
-        <div style={{ position: 'fixed', top: 16, left: 0, right: 0, zIndex: 200, display: 'flex', justifyContent: 'center', padding: '0 20px', pointerEvents: 'none' }}>
+        <div style={{ position: 'fixed', top: 16, left: 0, right: 0, zIndex: 200, display: 'flex', justifyContent: 'center', padding: '0 28px', pointerEvents: 'none' }}>
           <nav style={{
             pointerEvents: 'all', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            width: '100%', maxWidth: 1200,
+            width: '100%',
             background: 'rgba(191,191,191,0.45)',
             backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)',
             borderRadius: 32, padding: '10px 20px'
@@ -141,7 +156,7 @@
                   }}>{l.toUpperCase()}</button>
                 </React.Fragment>
               ))}
-              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 12, letterSpacing: '0.04em', color: DARK, cursor: 'pointer' }}>
+              <span className="nav-menu-label" style={{ fontFamily: "'Space Mono', monospace", fontSize: 12, letterSpacing: '0.04em', color: DARK, cursor: 'pointer' }}>
                 Menu
               </span>
             </div>
@@ -188,9 +203,9 @@
             {c.dienstenLabel}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
+          <div className="diensten-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
             {diensten.map((d, i) => (
-              <div key={i} style={{
+              <div key={i} className="diensten-item-inner" style={{
                 borderTop: `2px solid ${TC}`,
                 padding: '24px 28px 24px 0',
                 ...(i > 0 ? { paddingLeft: 28, borderLeft: '1px solid rgba(37,37,37,0.15)' } : {})
@@ -240,7 +255,8 @@
         return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
       });
       return (
-        <div style={{
+        <div className="n8n-outer">
+        <div className="n8n-inner" style={{
           position: 'relative', height: 120, borderRadius: 8, overflow: 'hidden',
           background: '#14121e',
           backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)',
@@ -279,6 +295,7 @@
             </div>
           ))}
         </div>
+        </div>
       );
     }
 
@@ -293,7 +310,7 @@
             </div>
           </div>
           <div style={{ padding: '0 28px 36px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 24, alignItems: 'start', marginBottom: 20 }}>
+            <div className="case-meta" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 24, alignItems: 'start', marginBottom: 20 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(24px,3vw,42px)', lineHeight: 1, textTransform: 'uppercase', color: DARK }}
                   dangerouslySetInnerHTML={{ __html: c.c1Name }} />
@@ -302,7 +319,7 @@
                 </div>
                 <div style={{ fontSize: 12, lineHeight: 1.7, color: 'rgba(37,37,37,0.7)', maxWidth: 480 }}>{c.c1Desc}</div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
+              <div className="case-stat" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
                 <span style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(28px,3vw,44px)', lineHeight: 1, color: TC }}>{c.c1StatNum}</span>
                 <span style={{ fontSize: 11, letterSpacing: '0.04em', color: 'rgba(37,37,37,0.6)', textAlign: 'right' }}>{c.c1StatLabel}</span>
               </div>
@@ -325,13 +342,13 @@
         { title: c.ov6Title, body: c.ov6Body },
       ];
       return (
-        <section style={{ borderTop: '1px solid rgba(37,37,37,0.15)', padding: '40px 28px 80px', display: 'grid', gridTemplateColumns: '140px 1fr', gap: '0 32px' }}>
-          <div>
+        <section className="overview-outer" style={{ borderTop: '1px solid rgba(37,37,37,0.15)', padding: '40px 28px 80px', display: 'grid', gridTemplateColumns: '140px 1fr', gap: '0 32px' }}>
+          <div className="overview-label-col">
             <div style={{ fontSize: 11, letterSpacing: '0.06em', textTransform: 'lowercase', color: DARK, paddingTop: 4 }}>{c.ovLabel}</div>
           </div>
           <div>
             {rows.map((row, i) => (
-              <div key={i} style={{
+              <div key={i} className="overview-row" style={{
                 borderTop: '1px solid rgba(37,37,37,0.15)',
                 padding: '24px 0',
                 display: 'grid',
@@ -343,7 +360,7 @@
                 <div style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(22px,3vw,38px)', lineHeight: 1, textTransform: 'lowercase', color: DARK }}>{row.title}</div>
                 <div style={{ fontSize: 13, lineHeight: 1.75, color: DARK, maxWidth: 480 }} dangerouslySetInnerHTML={{ __html: row.body }} />
                 {row.photo && (
-                  <div style={{ borderRadius: 8, overflow: 'hidden', aspectRatio: '3/4', background: '#d0cdc8' }}>
+                  <div className="overview-photo" style={{ borderRadius: 8, overflow: 'hidden', aspectRatio: '3/4', background: '#d0cdc8' }}>
                     <img src="jori-veldhuisen.jpeg" alt="Jori Veldhuisen" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   </div>
                 )}
