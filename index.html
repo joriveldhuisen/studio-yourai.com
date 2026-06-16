@@ -450,6 +450,24 @@
     <p class="review-cta-txt" data-i="reviewCtaText"></p>
     <div class="hero-btns"><a href="#booking" class="btn-p" data-i="reviewCtaBtn"></a></div>
   </div>
+
+  <!-- Case 2 -->
+  <div class="case-card">
+    <div class="branche-tag"><span class="dot dot-a"></span> <span data-i="case2Branche"></span></div>
+    <p class="case2-intro" data-i="case2Intro"></p>
+    <div class="case-head">
+      <div>
+        <div class="case-name" data-ihtml="case2Name"></div>
+        <div class="case-scope">
+          <span data-i="caseScopeLabel"></span>
+          <span class="dot"></span>
+          <span data-i="case2Scope"></span>
+        </div>
+        <div class="case-desc" data-i="case2Desc"></div>
+      </div>
+      <div class="case-stats" id="case-stats-2"></div>
+    </div>
+  </div>
 </section>
 
 <!-- ── ABOUT ─────────────────────────────────────────────────────── -->
@@ -509,7 +527,7 @@ const AR = '→', MD = '·';
 const COPY = {
   nl: {
     heroVariant: 'Zet meer leads<br>om in klanten',
-    heroSub: "AI die het werk doet: een website die klanten oplevert, opvolging binnen 1 minuut en processen die soepel lopen. Voor MKB’ers die willen groeien zonder harder te werken.",
+    heroSub: "AI die het werk doet: een website die klanten oplevert, opvolging binnen 1 minuut en processen die soepel lopen. Voor MKB'ers die willen groeien zonder harder te werken.",
     heroCta: 'Plan een vrijblijvend gesprek ' + AR,
     flowLabel: 'mijn werkwijze ' + MD + ' van kennismaking tot resultaat',
     flowStages: [
@@ -540,24 +558,30 @@ const COPY = {
     caseTitle: 'Praktijkvoorbeelden',
     caseIntro: 'Echte projecten waar ik aan werkte, uit verschillende branches.',
     casePromiseLabel: 'de belofte',
-    casePromise: ‘”Elke nieuwe aanvraag krijgt binnen 24 uur een reactie, ook als het team het druk heeft.”’,
-    caseBranche: ‘Zakelijke dienstverlening ‘ + MD + ‘ transport & logistiek’,
-    caseName: ‘Wall to Wall<br>Art Solutions’,
-    caseScopeLabel: ‘Scope’,
-    caseScope: ‘Automatische leadopvolging’,
-    caseDesc: ‘Nieuwe aanvragen bleven te lang liggen. Het team was druk, dus reageren op nieuwe klanten schoot erbij in. Tegen de tijd dat er een offerte lag, was de klant al verder. Elke nieuwe aanvraag wordt nu automatisch opgepakt. Het systeem vraagt de benodigde informatie uit, stelt een concept-reactie op in de stijl van het bedrijf, en zorgt dat het team binnen 24 uur reageert, zonder dat daar extra mensen voor nodig zijn.’,
+    casePromise: '"Binnen 24 uur reactie op elke lead." Gemaakt én waargemaakt.',
+    caseBranche: 'Branche ' + MD + ' Kunsttransport',
+    caseName: 'Wall to Wall<br>Art Solutions',
+    caseScopeLabel: 'Scope',
+    caseScope: 'AI Sales Agent in N8N',
+    caseDesc: 'Een AI-agent die nieuwe aanvragen voor kunsttransport automatisch beantwoordt als concept-mail, in de exacte tone of voice van Wall to Wall. Alle informatie voor een offerte wordt slim uitgevraagd, zodat het team binnen 24 uur reageert in plaats van na dagen.',
     caseStats: [
-      { num: ‘< 24 uur’, label: ‘reactietijd, was dagen’ },
-      { num: ‘6 uur’, label: ‘bespaard per week’ },
+      { num: '< 24 uur', label: 'reactietijd, was dagen' },
+      { num: '6 uur', label: 'bespaard per week' },
     ],
-    testimonialQuote: ‘”Jori heeft in korte tijd ons salesproces weten te verbeteren en automatiseren, waardoor wij meer tijd overhouden om nieuwe klanten binnen te halen.”’,
-    testimonialName: ‘Merijn’,
-    testimonialCompany: ‘Wall to Wall Art Solutions’,
+    testimonialQuote: '"Jori heeft in korte tijd ons salesproces weten te verbeteren en automatiseren, waardoor wij meer tijd overhouden om nieuwe klanten binnen te halen."',
+    testimonialName: 'Merijn',
+    testimonialCompany: 'Wall to Wall Art Solutions',
+    case2Branche: 'Branche ' + MD + ' Coaching',
+    case2Name: 'Live Wise<br>Studio',
+    case2Intro: 'Inactieve klanten weer gericht benaderd en het proces achter de schermen vereenvoudigd.',
+    case2Scope: 'Online activatie-tool + content-flow',
+    case2Desc: "Live Wise Studio verzorgt op maat gemaakte voedingsschema's en coaching, van ontbijt tot avondeten. Een grote groep inactieve klanten werd weer gericht benaderd met relevante content en het proces achter de schermen werd vereenvoudigd, waardoor het aantal actieve klanten groeide.",
+    case2Stat: { num: '+10%', label: 'actieve klanten' },
     reviewCtaText: 'Benieuwd wat dit voor jouw bedrijf kan doen?',
     reviewCtaBtn: 'Ook meer klanten? ' + AR,
     aboutKicker: 'over mij',
     aboutTitle: 'Ik ben Jori',
-    aboutBody: "Ben jij MKB’er? Dan help ik je meer leads omzetten in klanten. AI en slimme processen zijn daarbij het middel, niet het doel. Mijn passie is om het werk van jou én je medewerkers leuker en efficiënter te maken, zodat je kunt groeien en meer tijd overhoudt voor leuke dingen. Als verbeterconsultant leerde ik één ding: begrijp eerst het probleem, kies daarna pas het gereedschap. Omdat ik het belangrijk vind om echt resultaat te boeken, reken ik niet per uur maar voor het resultaat dat ik lever.",
+    aboutBody: "Ben jij MKB'er? Dan help ik je meer leads omzetten in klanten. AI en slimme processen zijn daarbij het middel, niet het doel. Mijn passie is om het werk van jou én je medewerkers leuker en efficiënter te maken, zodat je kunt groeien en meer tijd overhoudt voor leuke dingen. Als verbeterconsultant leerde ik één ding: begrijp eerst het probleem, kies daarna pas het gereedschap. Omdat ik het belangrijk vind om echt resultaat te boeken, reken ik niet per uur maar voor het resultaat dat ik lever.",
     aboutTags: ['Doortastend', 'Resultaatgericht', 'Recht door zee'],
     ctaTitle: 'Klaar om meer leads<br>om te zetten in klanten?',
     ctaSub: 'Een gesprek van 30 minuten, vrijblijvend. Je weet daarna precies hoe jij meer leads klant maakt.',
@@ -606,12 +630,12 @@ const COPY = {
     caseTitle: 'Case studies',
     caseIntro: 'Real projects I worked on, across different industries.',
     casePromiseLabel: 'the promise',
-    casePromise: '"Every new request gets a response within 24 hours, even when the team is busy."',
-    caseBranche: 'Business services ' + MD + ' transport & logistics',
+    casePromise: '"A reply to every lead within 24 hours." Made and kept.',
+    caseBranche: 'Industry ' + MD + ' Art transport',
     caseName: 'Wall to Wall<br>Art Solutions',
     caseScopeLabel: 'Scope',
-    caseScope: 'Automated lead follow-up',
-    caseDesc: "New requests were sitting too long. The team was busy, so responding to new clients kept getting pushed back. By the time a quote was ready, the client had moved on. Now every new request is picked up automatically. The system collects the necessary information, drafts a response in the company's style, and ensures the team replies within 24 hours — without needing extra staff.",
+    caseScope: 'AI Sales Agent in N8N',
+    caseDesc: 'An AI agent that automatically answers new art-transport requests as a draft email, in the exact tone of voice of Wall to Wall. It smartly collects all the information needed for a quote, so the team replies within 24 hours instead of days.',
     caseStats: [
       { num: '< 24 hrs', label: 'response time, was days' },
       { num: '6 hrs', label: 'saved per week' },
@@ -619,6 +643,12 @@ const COPY = {
     testimonialQuote: '"Jori improved and automated our sales process in a short time, giving us more time to focus on bringing in new clients."',
     testimonialName: 'Merijn',
     testimonialCompany: 'Wall to Wall Art Solutions',
+    case2Branche: 'Industry ' + MD + ' Coaching',
+    case2Name: 'Live Wise<br>Studio',
+    case2Intro: 'Re-engaged inactive clients with targeted outreach and simplified the process behind the scenes.',
+    case2Scope: 'Online activation tool + content flow',
+    case2Desc: "Live Wise Studio offers tailor-made nutrition plans and coaching, from breakfast to dinner. A large group of inactive clients was re-engaged with targeted, relevant content and the process behind the scenes was simplified, growing the number of active clients.",
+    case2Stat: { num: '+10%', label: 'active clients' },
     reviewCtaText: 'Curious what this could do for your business?',
     reviewCtaBtn: 'Want more clients too? ' + AR,
     aboutKicker: 'about me',
@@ -727,6 +757,10 @@ function renderStats(c) {
       s1.innerHTML += '<div><div class="stat-num">' + st.num + '</div><div class="stat-lbl">' + st.label + '</div></div>';
     });
   }
+  const s2 = document.getElementById('case-stats-2');
+  if (s2) {
+    s2.innerHTML = '<div><div class="stat-num">' + c.case2Stat.num + '</div><div class="stat-lbl">' + c.case2Stat.label + '</div></div>';
+  }
 }
 
 /* ── ABOUT TAGS ────────────────────────────────────────────────── */
@@ -766,7 +800,6 @@ function renderN8N() {
     { x: 556, y: 31, label: 'Gmail',         sub: 'Draft opslaan',         color: '#EA4335', icon: 'G' },
   ];
 
-  // SVG paths
   let svgHTML = '';
   nodes.slice(0, -1).forEach((a, i) => {
     const x1 = a.x + W, y1 = a.y + H / 2;
@@ -777,7 +810,6 @@ function renderN8N() {
   });
   svg.innerHTML = svgHTML;
 
-  // Nodes
   nodes.forEach((node, i) => {
     const div = document.createElement('div');
     div.className = 'n8n-node';
