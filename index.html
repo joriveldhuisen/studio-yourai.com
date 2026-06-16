@@ -3,423 +3,873 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studio Your AI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <title>Studio Your AI – Meer leads omzetten in klanten</title>
+  <meta name="description" content="AI die het werk doet: een website die klanten oplevert, opvolging binnen 1 minuut en processen die soepel lopen. Voor MKB'ers die willen groeien zonder harder te werken.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --accent: #C4593C;
+      --bg: rgb(241,240,238);
+      --dark: rgb(37,37,37);
+      --line: rgba(37,37,37,0.15);
+      --fh: 'Oxanium', sans-serif;
+      --fm: 'Space Mono', monospace;
+    }
+
     body {
-      background: rgb(241,240,238);
-      color: rgb(37,37,37);
-      font-family: 'Space Mono', monospace;
+      background: var(--bg);
+      color: var(--dark);
+      font-family: var(--fm);
       min-height: 100vh;
       overflow-x: hidden;
       padding-top: 76px;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .nav-wrap { padding: 0 16px !important; }
-      .nav-pill { padding: 8px 14px !important; border-radius: 20px !important; }
-      .diensten-grid { grid-template-columns: 1fr !important; }
-      .diensten-item-inner { padding-left: 0 !important; border-left: none !important; padding-right: 0 !important; }
-      .overview-outer { grid-template-columns: 1fr !important; gap: 0 !important; }
-      .overview-label-col { display: none; }
-      .overview-row { grid-template-columns: 1fr !important; }
-      .overview-photo { display: none; }
-      .case-meta { grid-template-columns: 1fr !important; }
-      .case-stat { align-items: flex-start !important; flex-direction: row !important; gap: 8px !important; align-items: baseline !important; }
-      .n8n-outer { overflow-x: auto; }
-      .n8n-inner { min-width: 700px; }
-      .nav-menu-label { display: none; }
+    /* ── NAVBAR ─────────────────────────────────────────── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 24px;
+      background: rgba(191,191,191,0.55);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+    }
+    .nav-logo {
+      font-family: var(--fh); font-weight: 800; font-size: 15px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--dark); line-height: 1;
+    }
+    .nav-langs { display: flex; align-items: center; gap: 4px; }
+    .lang-sep { font-size: 10px; color: #bbb; margin: 0 4px; }
+    .lang-btn {
+      font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em;
+      background: none; border: 1px solid transparent; cursor: pointer;
+      padding: 2px 7px; color: #888; border-radius: 4px; transition: all .15s;
+    }
+    .lang-btn.active { border-color: var(--dark); color: var(--dark); }
+
+    /* ── LAYOUT ──────────────────────────────────────────── */
+    .sec { padding-left: 28px; padding-right: 28px; }
+    .section-div { border-top: 1px solid var(--line); padding: 56px 28px; }
+
+    /* ── ATOMS ───────────────────────────────────────────── */
+    .kicker {
+      font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em;
+      text-transform: lowercase; color: rgba(37,37,37,0.5);
+    }
+    .dot {
+      display: inline-block; width: 4px; height: 4px;
+      border-radius: 50%; background: var(--dark);
+      flex-shrink: 0; vertical-align: middle;
+    }
+    .dot-a { background: var(--accent); }
+
+    /* ── BUTTONS ─────────────────────────────────────────── */
+    .btn-p {
+      font-family: var(--fh); font-size: 16px; font-weight: 800;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      background: var(--accent); color: var(--bg);
+      border: 2px solid var(--accent); border-radius: 4px;
+      padding: 16px 32px; cursor: pointer; text-decoration: none;
+      white-space: nowrap; display: inline-block;
+      transition: background .25s, color .25s;
+    }
+    .btn-p:hover { background: transparent; color: var(--accent); }
+
+    /* ── LEAD-FLOW ───────────────────────────────────────── */
+    .lf {
+      background: #faf9f7; border: 1px solid rgba(37,37,37,0.14);
+      border-radius: 10px; padding: 22px 20px; height: 100%;
+      display: flex; flex-direction: column;
+      box-shadow: 4px 5px 0 rgba(37,37,37,0.05);
+    }
+    .lf-head {
+      font-family: var(--fm); font-size: 11px; letter-spacing: 0.06em;
+      text-transform: lowercase; color: rgba(37,37,37,0.5);
+      margin-bottom: 18px; padding-bottom: 14px;
+      border-bottom: 1px solid rgba(37,37,37,0.1);
+    }
+    .lf-stages { display: flex; flex-direction: column; flex: 1; justify-content: center; }
+    .lf-card {
+      border: 1px solid rgba(37,37,37,0.12); border-radius: 8px;
+      background: #fff; padding: 11px 14px;
+      display: flex; align-items: center; gap: 13px;
+    }
+    .lf-num {
+      font-family: var(--fh); font-weight: 800; font-size: 12px;
+      letter-spacing: 0.04em; width: 30px; height: 30px; flex-shrink: 0;
+      border-radius: 6px; border: 1.5px solid var(--accent); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lf-title {
+      font-family: var(--fh); font-weight: 700; font-size: 13.5px;
+      letter-spacing: 0.01em; text-transform: uppercase; color: var(--dark); line-height: 1.15;
+    }
+    .lf-conn { height: 13px; display: flex; align-items: center; padding-left: 15px; }
+    .lf-conn .bar { width: 2px; height: 100%; background: rgba(37,37,37,0.15); position: relative; }
+    .lf-conn .bar::after {
+      content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+      top: -3px; opacity: 0;
+    }
+    .lf-card .lf-num { animation: lfNum 6s ease-in-out infinite; }
+    .lf-s0 .lf-num { animation-delay: 0s; }
+    .lf-s1 .lf-num { animation-delay: 1.2s; }
+    .lf-s2 .lf-num { animation-delay: 2.4s; }
+    .lf-s3 .lf-num { animation-delay: 3.6s; }
+    .lf-s4 .lf-num { animation-delay: 4.8s; }
+    .lf-c0 .bar::after { animation: lfDrop 6s ease-in-out infinite; animation-delay: 0.7s; }
+    .lf-c1 .bar::after { animation: lfDrop 6s ease-in-out infinite; animation-delay: 1.9s; }
+    .lf-c2 .bar::after { animation: lfDrop 6s ease-in-out infinite; animation-delay: 3.1s; }
+    .lf-c3 .bar::after { animation: lfDrop 6s ease-in-out infinite; animation-delay: 4.3s; }
+    @keyframes lfNum {
+      0%,28%,100% { background: transparent; color: var(--accent); }
+      6%,20%      { background: var(--accent); color: #fff; }
+    }
+    @keyframes lfDrop {
+      0%       { top: -3px; opacity: 0; }
+      3%       { opacity: 1; }
+      10%      { top: 100%; opacity: 1; }
+      12%,100% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lf-num, .lf-conn .bar::after { animation: none !important; }
+    }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero-section {
+      padding: 32px 28px 40px;
+      display: grid; grid-template-columns: 1fr 38%; gap: 40px; align-items: center;
+    }
+    .hero-h1 {
+      font-family: var(--fh); font-weight: 800;
+      font-size: clamp(38px, 5.2vw, 78px); line-height: 0.95;
+      letter-spacing: -0.01em; text-transform: uppercase; color: var(--dark);
+    }
+    .hero-sub {
+      max-width: 580px; font-size: 15px; line-height: 1.7;
+      color: rgba(37,37,37,0.75); padding-top: 30px;
+    }
+    .hero-btns { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 24px; }
+    .hero-visual { height: clamp(440px, 50vw, 600px); }
+
+    /* ── PROBLEM ─────────────────────────────────────────── */
+    .prob-h2 {
+      font-family: var(--fh); font-weight: 800;
+      font-size: clamp(30px, 5vw, 64px); line-height: 0.98;
+      text-transform: uppercase; color: var(--dark); max-width: 900px; margin-top: 28px;
+    }
+    .prob-body { max-width: 620px; font-size: 15px; line-height: 1.75; color: rgba(37,37,37,0.72); margin-top: 24px; }
+    .prob-body2 { max-width: 620px; font-size: 15px; line-height: 1.75; color: rgba(37,37,37,0.72); margin-top: 16px; }
+    .punch {
+      margin-top: 28px; border-left: 3px solid var(--accent); padding-left: 18px;
+    }
+    .punch p {
+      font-family: var(--fh); font-weight: 700;
+      font-size: clamp(18px, 2.4vw, 28px); line-height: 1.25; color: var(--dark); max-width: 640px;
+    }
+    .prob-cta { margin-top: 28px; }
+
+    /* ── APPROACH ────────────────────────────────────────── */
+    .aanpak-h2 {
+      font-family: var(--fh); font-weight: 800;
+      font-size: clamp(28px, 4vw, 52px); line-height: 1;
+      text-transform: uppercase; color: var(--dark); margin-bottom: 36px; margin-top: 12px;
+    }
+    .steps-grid { display: grid; grid-template-columns: repeat(5, 1fr); }
+    .step {
+      position: relative; border-top: 2px solid var(--accent); padding: 22px 18px 26px 0;
+    }
+    .step + .step { padding-left: 18px; border-left: 1px solid var(--line); }
+    .step-num { font-family: var(--fh); font-weight: 800; font-size: 13px; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 12px; }
+    .step-title { font-family: var(--fh); font-weight: 800; font-size: clamp(16px,1.5vw,21px); line-height: 1.05; text-transform: uppercase; color: var(--dark); margin-bottom: 12px; }
+    .step-body { font-size: 12.5px; line-height: 1.65; color: rgba(37,37,37,0.65); }
+    .step-arrow { position: absolute; right: -8px; top: 28px; color: var(--accent); font-size: 16px; font-weight: 700; }
+    .diensten-row { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 22px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-family: var(--fm); font-size: 12.5px; letter-spacing: 0.02em; color: var(--dark);
+      border: 1px solid var(--line); border-radius: 6px; padding: 11px 16px;
+    }
+
+    /* ── CASES ───────────────────────────────────────────── */
+    .case-h2 {
+      font-family: var(--fh); font-weight: 800;
+      font-size: clamp(28px,4vw,52px); line-height: 1;
+      text-transform: uppercase; color: var(--dark); margin-bottom: 14px; margin-top: 12px;
+    }
+    .case-intro { max-width: 560px; font-size: 14.5px; line-height: 1.7; color: rgba(37,37,37,0.72); }
+    .case-card {
+      background: #faf9f7; border: 1px solid var(--line); border-radius: 12px;
+      padding: clamp(22px,3vw,38px); box-shadow: 4px 5px 0 rgba(37,37,37,0.05); margin-top: 34px;
+    }
+    .branche-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--fm); font-size: 11px; letter-spacing: 0.04em; color: var(--dark);
+      border: 1px solid var(--accent); border-radius: 20px; padding: 6px 13px; margin-bottom: 22px;
+    }
+    .promise-wrap { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 30px; max-width: 760px; }
+    .promise-lbl {
+      font-family: var(--fm); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); border: 1px solid var(--accent); border-radius: 20px;
+      padding: 4px 11px; white-space: nowrap; margin-top: 4px; flex-shrink: 0;
+    }
+    .promise-txt {
+      font-family: var(--fh); font-weight: 700;
+      font-size: clamp(20px,2.6vw,32px); line-height: 1.2; color: var(--dark);
+    }
+    .case-head { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: start; margin-bottom: 22px; }
+    .case-name { font-family: var(--fh); font-weight: 800; font-size: clamp(26px,3vw,46px); line-height: 0.95; text-transform: uppercase; color: var(--dark); }
+    .case-scope { font-size: 11px; letter-spacing: 0.04em; color: var(--dark); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
+    .case-desc { font-size: 13px; line-height: 1.75; color: rgba(37,37,37,0.7); max-width: 520px; margin-top: 4px; }
+    .case-stats { display: flex; flex-direction: column; gap: 18px; align-items: flex-end; }
+    .stat-num { font-family: var(--fh); font-weight: 800; font-size: clamp(26px,3.2vw,44px); line-height: 1; color: var(--accent); text-align: right; }
+    .stat-lbl { font-size: 11px; letter-spacing: 0.03em; color: rgba(37,37,37,0.6); text-align: right; }
+    .testimonial { margin-top: 32px; border-top: 2px solid var(--accent); padding-top: 24px; max-width: 760px; }
+    .testimonial blockquote { font-family: var(--fh); font-weight: 700; font-size: clamp(17px,2vw,26px); line-height: 1.4; color: var(--dark); }
+    .t-meta { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.05em; color: rgba(37,37,37,0.5); }
+    .t-name { color: var(--dark); font-weight: 700; }
+    .review-cta { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-top: 24px; padding: 4px 2px; }
+    .review-cta-txt { font-family: var(--fh); font-weight: 700; font-size: clamp(18px,2.2vw,26px); line-height: 1.2; color: var(--dark); }
+    .case2-intro { font-family: var(--fh); font-weight: 700; font-size: clamp(17px,2.2vw,26px); line-height: 1.3; color: var(--dark); max-width: 680px; margin-bottom: 26px; }
+
+    /* ── N8N FLOW ────────────────────────────────────────── */
+    .n8n-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 8px; }
+    .n8n-canvas {
+      width: 700px; height: 120px; position: relative;
+      border-radius: 8px; overflow: hidden;
+      background: #14121e;
+      background-image: radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .n8n-node {
+      position: absolute; width: 130px; height: 58px;
+      background: rgba(26,24,40,0.97); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 8px 10px; display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .n8n-icon {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 10px; color: white; font-weight: 700; font-family: var(--fm);
+    }
+    .n8n-lbl { font-size: 10px; color: rgba(255,255,255,0.85); margin-bottom: 2px; font-family: var(--fm); }
+    .n8n-sub { font-size: 9px; color: rgba(255,255,255,0.35); font-family: var(--fm); line-height: 1.3; }
+    .n8n-port {
+      position: absolute; width: 9px; height: 9px; border-radius: 50%;
+      background: #2d2b3e; border: 1.5px solid rgba(255,255,255,0.25); top: 50%; transform: translateY(-50%);
+    }
+    .n8n-port-r { right: -5px; }
+    .n8n-port-l { left: -5px; }
+
+    /* ── ABOUT ───────────────────────────────────────────── */
+    .about-grid { display: grid; grid-template-columns: 230px 1fr; gap: 36px; align-items: start; }
+    .about-photo { border-radius: 8px; overflow: hidden; aspect-ratio: 3/4; background: #d0cdc8; }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .about-h2 {
+      font-family: var(--fh); font-weight: 800; font-size: clamp(26px,3.4vw,44px);
+      line-height: 1; text-transform: uppercase; color: var(--dark); margin-bottom: 20px; margin-top: 12px;
+    }
+    .about-body { font-size: 14px; line-height: 1.8; color: var(--dark); max-width: 560px; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .about-tag {
+      font-family: var(--fm); font-size: 11px; letter-spacing: 0.04em;
+      color: rgba(37,37,37,0.7); border: 1px solid var(--line); border-radius: 20px; padding: 7px 15px;
+    }
+
+    /* ── CTA ─────────────────────────────────────────────── */
+    .cta-section { padding-bottom: 72px; }
+    .cta-h2 {
+      font-family: var(--fh); font-weight: 800; font-size: clamp(30px,5.5vw,72px);
+      line-height: 0.95; text-transform: uppercase; color: var(--dark);
+    }
+    .cta-sub { max-width: 560px; font-size: 15px; line-height: 1.7; color: rgba(37,37,37,0.72); margin-top: 22px; }
+    .cta-btns { margin-top: 28px; }
+
+    /* ── BOOKING ─────────────────────────────────────────── */
+    #booking { scroll-margin-top: 90px; }
+    .booking-h2 {
+      font-family: var(--fh); font-weight: 800; font-size: clamp(28px,4vw,52px);
+      line-height: 1; text-transform: uppercase; color: var(--dark); margin-bottom: 14px; margin-top: 12px;
+    }
+    .booking-sub { max-width: 560px; font-size: 14.5px; line-height: 1.7; color: rgba(37,37,37,0.72); margin-bottom: 16px; }
+    .booking-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 34px; }
+    .booking-meta-item {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--fm); font-size: 12px; letter-spacing: 0.02em; color: var(--dark);
+      border: 1px solid var(--line); border-radius: 6px; padding: 8px 14px;
+    }
+    .booking-card {
+      background: #faf9f7; border: 1px solid var(--line); border-radius: 10px;
+      padding: clamp(12px,2vw,22px); box-shadow: 4px 5px 0 rgba(37,37,37,0.05); max-width: 980px;
+    }
+    #cal-inline { width: 100%; min-height: 620px; overflow: hidden; border-radius: 6px; }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer { background: var(--accent); color: var(--bg); padding: 48px 28px 36px; }
+    .footer-logo {
+      font-family: var(--fh); font-weight: 800; font-size: clamp(28px,5.5vw,72px);
+      line-height: 1; text-transform: uppercase;
+      transform: scaleX(1.05); transform-origin: left; display: inline-block;
+    }
+    .footer-sub { font-size: 11px; color: rgba(241,240,238,0.65); margin-top: 10px; letter-spacing: 0.05em; }
+    .footer-bottom {
+      margin-top: 44px; padding-top: 22px; border-top: 1px solid rgba(241,240,238,0.25);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 11px; color: rgba(241,240,238,0.6); letter-spacing: 0.05em; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { color: rgba(241,240,238,0.6); text-decoration: none; transition: color .15s; }
+    .footer-links a:hover { color: var(--bg); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 640px) {
+      body { padding-top: 68px; }
+      .sec, .section-div { padding-left: 16px; padding-right: 16px; }
+      .hero-section { grid-template-columns: 1fr; gap: 24px; }
+      .hero-btns { flex-direction: column; align-items: stretch; }
+      .hero-btns .btn-p { text-align: center; font-size: 14px; padding: 15px 18px; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .step + .step { border-left: none; padding-left: 0; }
+      .step-arrow { display: none; }
+      .case-head { grid-template-columns: 1fr; }
+      .case-stats { align-items: flex-start; }
+      .review-cta { flex-direction: column; align-items: stretch; }
+      .review-cta .btn-p { text-align: center; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo { max-width: 220px; margin: 0 auto; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+    @media (min-width: 641px) and (max-width: 900px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .step + .step { border-left: none; padding-left: 0; }
+      .step-arrow { display: none; }
     }
   </style>
 </head>
 <body>
-  <div id="root"></div>
 
-  <script type="text/babel">
-    /* ─── COPY ─── */
-    const COPY = {
-      en: {
-        heroTitle: 'AI Made Clear.<br>Results That Count.',
-        heroSub: "AI doesn't have to be complicated. I make it understandable and practical for every business, big or small. No jargon, no loose theory. Just hands-on approaches that save real time.",
-        ctaDiensten: 'My Services', ctaGesprek: 'Schedule an intro call →',
-        dienstenLabel: 'services',
-        d1Title: 'Training &amp;<br>Workshops',
-        d1Desc: "For groups of 6 to 1,200 people. From team days to conferences. Practical, energetic, and immediately applicable, no dry theory, just tools you'll use the very next day.",
-        d2Title: 'Smart<br>Client Growth',
-        d2Desc: 'I use AI to turn your website visitors into paying clients. From conversion-focused content to automated follow-up: I build the system that keeps your growth going, even when you are not.',
-        d3Title: 'Processes<br>in Order',
-        d3Desc: 'I map your administrative processes and automate what costs you unnecessary time. So you can put your energy into what truly matters: your clients and your growth.',
-        resultNum: '10 hrs / week', resultText: 'My goal: save you at least 10 hours per week within 90 days. Measurable, concrete, no vague promises.',
-        testimonialQuote: '"Jori improved and automated our sales process in a short time, giving us more time to focus on bringing in new clients."',
-        testimonialCompany: 'Wall to Wall Art Solutions',
-        c1Name: 'Wall to Wall<br>Art Solutions', c1ScopeLabel: 'Scope',
-        c1Scope: 'N8N Sales Agent',
-        c1Desc: 'An AI agent in N8N that automatically responds to new art transport requests as a draft email. The agent writes in the exact tone of voice of Wall to Wall and smartly collects all the information needed for the team to produce a quote immediately.',
-        c1StatNum: '6 hrs', c1StatLabel: 'saved per week',
-        ovLabel: 'overview',
-        ov1Title: 'what I do', ov1Body: 'I make AI accessible and understandable for businesses of all sizes. By combining lean methodology with AI I identify where the real opportunities lie and build the right tools to capture them. I guide you through every step, from first analysis to live implementation.',
-        ov2Title: 'my mission', ov2Body: "Every business, regardless of size or budget, should be able to work with AI. That's what drives me. I don't work on an hourly basis. I create tangible value and charge for that value. No surprises, no wasted time. Just results that matter to your business.",
-        ov3Title: 'how it helps', ov3Body: 'AI saves time, lowers costs, and creates competitive advantage, but only when applied to the right problem. I cut through the hype and make it concrete for your specific context: simpler processes, faster decisions, and better experiences for end users.',
-        ov4Title: 'who I am', ov4Body: "I'm <strong>Jori Veldhuisen</strong>, an experienced lean consultant with a deep passion for AI. By combining lean thinking with AI, I know how to make processes genuinely more efficient. The key lesson: don't jump straight to a solution. First understand the problem deeply. Only then does the right tool become obvious.<br><br>I create value by seizing the right opportunities and simplifying processes for end users.",
-        ov5Title: 'who I work with', ov5Body: "I work best with ambitious businesses that are ready to stop wondering what AI could do and start seeing it work. From logistics and e-commerce to healthcare and SaaS: if there's a process that can be smarter, I want to find it.",
-        ov6Title: 'what it costs', ov6Body: "No hourly billing. I work on a value-creation basis: I agree on the outcome, define the scope, and set a fixed price. I start with a free intake call, no strings attached. If there's a real opportunity, we'll find it together.",
-        footerSub: 'AI made simple for every company',
-        footerCopy: '© 2026 Studio Your AI, Panicale, Italy', footerContact: 'Contact',
-      },
-      nl: {
-        heroTitle: 'AI begrijpelijk.<br>Resultaat meetbaar.',
-        heroSub: 'AI hoeft niet ingewikkeld te zijn. Ik maak het begrijpbaar en praktisch voor ieder bedrijf, groot of klein. Geen moeilijke woorden of losse theorie, maar concrete aanpak die direct tijd oplevert.',
-        ctaDiensten: 'Mijn diensten', ctaGesprek: 'Plan een kennismakingsgesprek →',
-        dienstenLabel: 'diensten',
-        d1Title: 'Training &amp;<br>Workshops',
-        d1Desc: 'Voor groepen van 6 tot 1.200 personen. Van teamdag tot congres. Praktisch, energiek en direct toepasbaar, geen saaie theorie maar tools die je de volgende dag al gebruikt.',
-        d2Title: 'Slimme<br>Klantgroei',
-        d2Desc: 'Ik gebruik AI om jouw website bezoekers om te zetten naar betalende klanten. Van conversiegerichte content tot geautomatiseerde opvolging: ik bouw het systeem dat jouw groei op gang houdt, ook als jij er niet bij bent.',
-        d3Title: 'Processen<br>op Orde',
-        d3Desc: 'Ik breng jouw administratieve processen in kaart en automatiseer wat jou onnodig tijd kost. Zodat jij je energie kunt steken in wat er écht toe doet: je klanten en je groei.',
-        resultNum: '10 uur / week', resultText: 'Resultaat waar ik voor ga: in 90 dagen minstens 10 uur per week besparen. Meetbaar, concreet, geen vage beloftes.',
-        testimonialQuote: '"Jori heeft in korte tijd ons salesproces weten te verbeteren en automatiseren waardoor wij meer tijd over hebben om nieuwe klanten binnen te halen."',
-        testimonialCompany: 'Wall to Wall Art Solutions',
-        c1Name: 'Wall to Wall<br>Art Solutions', c1ScopeLabel: 'Scope',
-        c1Scope: 'N8N Sales Agent',
-        c1Desc: 'Een AI-agent in N8N die nieuwe aanvragen voor kunsttransport automatisch beantwoordt als concept-mail. De agent schrijft in de exacte tone of voice van Wall to Wall en vraagt slim alle benodigde informatie op zodat het team direct een offerte kan opmaken.',
-        c1StatNum: '6 uur', c1StatLabel: 'bespaard per week',
-        ovLabel: 'overzicht',
-        ov1Title: 'wat ik doe', ov1Body: 'Ik maak AI toegankelijk en begrijpbaar voor bedrijven van alle groottes. Door lean-denken te combineren met AI bepaal ik waar de echte kansen liggen en bouw ik de juiste tools om die te benutten. Ik begeleid je in elke stap, van eerste analyse tot live implementatie.',
-        ov2Title: 'mijn missie', ov2Body: 'Ieder bedrijf, ongeacht omvang of budget, zou gebruik moeten kunnen maken van AI. Dat drijft mij. Ik werk niet op uurbasis. Ik creëer aantoonbare waarde en reken voor die waarde. Geen verrassingen, geen verspilde tijd. Alleen resultaten die er toe doen.',
-        ov3Title: 'hoe het helpt', ov3Body: 'AI bespaart tijd, verlaagt kosten en creëert concurrentievoordeel, maar alleen wanneer het op het juiste probleem wordt ingezet. Ik snij door de hype heen en maak het concreet voor jouw context: eenvoudigere processen, snellere beslissingen en betere ervaringen voor eindgebruikers.',
-        ov4Title: 'wie ik ben', ov4Body: 'Ik ben <strong>Jori Veldhuisen</strong>, een ervaren lean consultant met een diepe passie voor AI. Door lean-denken te combineren met AI weet ik hoe ik processen écht efficiënter maak. De kernles: schiet niet meteen naar een oplossing. Begrijp eerst het probleem grondig. Pas dan wordt het juiste gereedschap vanzelfsprekend.<br><br>Ik creëer waarde door de juiste kansen te benutten en processen te vereenvoudigen voor eindgebruikers.',
-        ov5Title: 'voor wie', ov5Body: 'Ik werk het beste samen met ambitieuze bedrijven die klaar zijn om te stoppen met afvragen wat AI zou kunnen doen en het in actie willen zien. Van logistiek en e-commerce tot zorg en SaaS: als er een proces slimmer kan, wil ik het vinden.',
-        ov6Title: 'wat het kost', ov6Body: 'Geen uurtje-factuurtje. Ik werk op basis van waardecreatie: ik spreek een uitkomst af, definieer de scope en stel een vaste prijs vast. Ik start met een gratis intakegesprek, vrijblijvend. Als er een echte kans is, vinden we die samen.',
-        footerSub: 'AI begrijpbaar voor ieder bedrijf',
-        footerCopy: '© 2026 Studio Your AI, Panicale, Italië', footerContact: 'Contact',
+<!-- ── NAVBAR ──────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <span class="nav-logo">Studio Your AI</span>
+  <div class="nav-langs">
+    <button class="lang-btn active" data-lang="nl" onclick="setLang('nl')">NL</button>
+    <span class="lang-sep">|</span>
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────────────────── -->
+<section class="sec hero-section">
+  <div>
+    <h1 class="hero-h1" data-ihtml="heroVariant"></h1>
+    <p class="hero-sub" data-i="heroSub"></p>
+    <div class="hero-btns">
+      <a href="#booking" class="btn-p" data-i="heroCta"></a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="lf">
+      <div class="lf-head" data-i="flowLabel"></div>
+      <div class="lf-stages" id="lf-stages"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEM ──────────────────────────────────────────────────── -->
+<section class="section-div">
+  <div class="kicker" data-i="probKicker"></div>
+  <h2 class="prob-h2" data-ihtml="probTitle"></h2>
+  <p class="prob-body" data-i="probBody"></p>
+  <p class="prob-body2" data-i="probBody2"></p>
+  <div class="punch"><p data-i="probPunch"></p></div>
+  <div class="prob-cta hero-btns">
+    <a href="#booking" class="btn-p" data-i="probCta"></a>
+  </div>
+</section>
+
+<!-- ── APPROACH ─────────────────────────────────────────────────── -->
+<section class="section-div">
+  <div class="kicker" data-i="aanpakKicker"></div>
+  <h2 class="aanpak-h2" data-i="aanpakTitle"></h2>
+  <div class="steps-grid" id="steps-grid"></div>
+  <div class="diensten-row">
+    <div class="kicker" data-i="dienstenLabel"></div>
+    <div class="tags" id="tags-wrap"></div>
+  </div>
+</section>
+
+<!-- ── CASES ────────────────────────────────────────────────────── -->
+<section class="section-div">
+  <div class="kicker" data-i="caseKicker"></div>
+  <h2 class="case-h2" data-i="caseTitle"></h2>
+  <p class="case-intro" data-i="caseIntro"></p>
+
+  <!-- Case 1 -->
+  <div class="case-card">
+    <div class="branche-tag"><span class="dot dot-a"></span> <span data-i="caseBranche"></span></div>
+    <div class="promise-wrap">
+      <span class="promise-lbl" data-i="casePromiseLabel"></span>
+      <p class="promise-txt" data-i="casePromise"></p>
+    </div>
+    <div class="case-head">
+      <div>
+        <div class="case-name" data-ihtml="caseName"></div>
+        <div class="case-scope">
+          <span data-i="caseScopeLabel"></span>
+          <span class="dot"></span>
+          <span data-i="caseScope"></span>
+        </div>
+        <div class="case-desc" data-i="caseDesc"></div>
+      </div>
+      <div class="case-stats" id="case-stats-1"></div>
+    </div>
+    <!-- N8N flow -->
+    <div class="n8n-wrap"><div class="n8n-canvas" id="n8n-canvas">
+      <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 700 120" preserveAspectRatio="xMidYMid meet" id="n8n-svg"></svg>
+    </div></div>
+    <!-- Testimonial -->
+    <div class="testimonial">
+      <blockquote data-i="testimonialQuote"></blockquote>
+      <div class="t-meta">
+        <span class="t-name" data-i="testimonialName"></span>
+        <span class="dot"></span>
+        <span data-i="testimonialCompany"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review CTA -->
+  <div class="review-cta">
+    <p class="review-cta-txt" data-i="reviewCtaText"></p>
+    <div class="hero-btns"><a href="#booking" class="btn-p" data-i="reviewCtaBtn"></a></div>
+  </div>
+
+  <!-- Case 2 -->
+  <div class="case-card">
+    <div class="branche-tag"><span class="dot dot-a"></span> <span data-i="case2Branche"></span></div>
+    <p class="case2-intro" data-i="case2Intro"></p>
+    <div class="case-head">
+      <div>
+        <div class="case-name" data-ihtml="case2Name"></div>
+        <div class="case-scope">
+          <span data-i="caseScopeLabel"></span>
+          <span class="dot"></span>
+          <span data-i="case2Scope"></span>
+        </div>
+        <div class="case-desc" data-i="case2Desc"></div>
+      </div>
+      <div class="case-stats" id="case-stats-2"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ─────────────────────────────────────────────────────── -->
+<section class="section-div">
+  <div class="about-grid">
+    <div class="about-photo">
+      <img src="jori-veldhuisen.jpeg" alt="Jori Veldhuisen">
+    </div>
+    <div>
+      <div class="kicker" data-i="aboutKicker"></div>
+      <h2 class="about-h2" data-i="aboutTitle"></h2>
+      <p class="about-body" data-i="aboutBody"></p>
+      <div class="about-tags" id="about-tags"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ───────────────────────────────────────────────────────── -->
+<section class="section-div cta-section">
+  <h2 class="cta-h2" data-ihtml="ctaTitle"></h2>
+  <p class="cta-sub" data-i="ctaSub"></p>
+  <div class="cta-btns hero-btns">
+    <a href="#booking" class="btn-p" data-i="ctaBtn"></a>
+  </div>
+</section>
+
+<!-- ── BOOKING ───────────────────────────────────────────────────── -->
+<section id="booking" class="section-div">
+  <div class="kicker" data-i="bookKicker"></div>
+  <h2 class="booking-h2" data-i="bookTitle"></h2>
+  <p class="booking-sub" data-i="bookSub"></p>
+  <div class="booking-meta" id="booking-meta"></div>
+  <div class="booking-card">
+    <div id="cal-inline"></div>
+    <noscript>
+      <a href="https://cal.com/jori-veldhuisen-xcj0j8/intake-studio-your-ai" target="_blank" rel="noopener">Boek een gesprek via cal.com</a>
+    </noscript>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">Studio Your AI</div>
+  <div class="footer-sub" data-i="footerSub"></div>
+  <div class="footer-bottom">
+    <span data-i="footerCopy"></span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/jori-veldhuisen-2793b724/" target="_blank" rel="noopener noreferrer" data-i="footerLinkedin"></a>
+      <a href="#booking" data-i="footerContact"></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── COPY ──────────────────────────────────────────────────────── */
+const AR = '→', MD = '·';
+const COPY = {
+  nl: {
+    heroVariant: 'Zet meer leads<br>om in klanten',
+    heroSub: "AI die het werk doet: een website die klanten oplevert, opvolging binnen 1 minuut en processen die soepel lopen. Voor MKB’ers die willen groeien zonder harder te werken.",
+    heroCta: 'Plan een vrijblijvend gesprek ' + AR,
+    flowLabel: 'mijn werkwijze ' + MD + ' van kennismaking tot resultaat',
+    flowStages: [
+      { num: '01', title: 'Kennismakingsgesprek' },
+      { num: '02', title: 'Analyse van je bedrijf' },
+      { num: '03', title: 'Plan van aanpak' },
+      { num: '04', title: 'Uitvoering op maat' },
+      { num: '05', title: 'Resultaat: meer klanten' },
+    ],
+    probKicker: 'voor wie ' + MD + ' MKB en kleine ondernemers',
+    probTitle: 'Je leads koelen af<br>voordat je reageert',
+    probBody: "Er komen wel leads binnen, maar je komt middelen tekort. Je opvolging is onvoldoende, waardoor offertes te lang blijven liggen, leads koud worden en je omzet misloopt. Zonde.",
+    probBody2: "Wat als dit hele proces geautomatiseerd zou zijn? Waardoor je leads binnen 1 minuut opvolgt, terwijl je tijd overhoudt voor andere dingen.",
+    probPunch: "Ben jij er klaar voor om meer klanten binnen te halen, zonder daar hard voor te hoeven werken?",
+    probCta: 'Plan een vrijblijvend gesprek ' + AR,
+    aanpakKicker: 'zo werken we samen',
+    aanpakTitle: 'Mijn werkwijze',
+    steps: [
+      { num: '01', title: 'Kennismaking', body: 'Een vrijblijvend gesprek: passen we bij elkaar en wat kan ik voor je betekenen?' },
+      { num: '02', title: 'Analyse', body: 'Ik duik in je situatie en bedrijf, en breng je verkoopproces in kaart.' },
+      { num: '03', title: 'Plan van aanpak', body: 'Een concreet plan: wat we automatiseren, in welke volgorde en wat het oplevert.' },
+      { num: '04', title: 'Uitvoering', body: 'Ik bouw de oplossing op maat, in jouw stijl, en zet alles werkend neer.' },
+      { num: '05', title: 'Resultaat', body: 'Het werkt en je ziet het terug: meer klanten, minder handwerk.' },
+    ],
+    aanpakTags: ['Een website die klanten oplevert', 'Opvolging binnen 24 uur', 'Processen die niet vastlopen'],
+    dienstenLabel: 'wat je krijgt',
+    caseKicker: 'bewijs ' + MD + ' echte projecten',
+    caseTitle: 'Praktijkvoorbeelden',
+    caseIntro: 'Echte projecten waar ik aan werkte, uit verschillende branches.',
+    casePromiseLabel: 'de belofte',
+    casePromise: '”Binnen 24 uur reactie op elke lead.”',
+    caseBranche: 'Branche ' + MD + ' Kunsttransport',
+    caseName: 'Wall to Wall<br>Art Solutions',
+    caseScopeLabel: 'Scope',
+    caseScope: 'AI Sales Agent in N8N',
+    caseDesc: 'Een AI-agent die nieuwe aanvragen voor kunsttransport automatisch beantwoordt als concept-mail, in de exacte tone of voice van Wall to Wall. Alle informatie voor een offerte wordt slim uitgevraagd, zodat het team binnen 24 uur reageert in plaats van na dagen.',
+    caseStats: [
+      { num: '< 24 uur', label: 'reactietijd, was dagen' },
+      { num: '6 uur', label: 'bespaard per week' },
+    ],
+    testimonialQuote: '“Jori heeft in korte tijd ons salesproces weten te verbeteren en automatiseren, waardoor wij meer tijd overhouden om nieuwe klanten binnen te halen.”',
+    testimonialName: 'Merijn',
+    testimonialCompany: 'Wall to Wall Art Solutions',
+    case2Branche: 'Branche ' + MD + ' Coaching',
+    case2Name: 'Live Wise<br>Studio',
+    case2Intro: 'Inactieve klanten weer gericht benaderd en het proces achter de schermen vereenvoudigd.',
+    case2Scope: 'Online activatie-tool + content-flow',
+    case2Desc: 'Live Wise Studio verzorgt op maat gemaakte voedingsschema’s en coaching, van ontbijt tot avondeten. Een grote groep inactieve klanten werd weer gericht benaderd met relevante content en het proces achter de schermen werd vereenvoudigd, waardoor het aantal actieve klanten groeide.',
+    case2Stat: { num: '+10%', label: 'actieve klanten' },
+    reviewCtaText: 'Benieuwd wat dit voor jouw bedrijf kan doen?',
+    reviewCtaBtn: 'Ook meer klanten? ' + AR,
+    aboutKicker: 'over mij',
+    aboutTitle: 'Ik ben Jori',
+    aboutBody: "Ben jij MKB’er? Dan help ik je meer leads omzetten in klanten. AI en slimme processen zijn daarbij het middel, niet het doel. Mijn passie is om het werk van jou én je medewerkers leuker en efficiënter te maken, zodat je kunt groeien en meer tijd overhoudt voor leuke dingen. Als verbeterconsultant leerde ik één ding: begrijp eerst het probleem, kies daarna pas het gereedschap. Omdat ik het belangrijk vind om echt resultaat te boeken, reken ik niet per uur maar voor het resultaat dat ik lever.",
+    aboutTags: ['Doortastend', 'Resultaatgericht', 'Recht door zee'],
+    ctaTitle: 'Klaar om meer leads<br>om te zetten in klanten?',
+    ctaSub: 'Een gesprek van 30 minuten, vrijblijvend. Je weet daarna precies hoe jij meer leads klant maakt.',
+    ctaBtn: 'Plan een vrijblijvend gesprek ' + AR,
+    bookKicker: 'plan je gesprek ' + MD + ' vrijblijvend',
+    bookTitle: 'Kies een moment',
+    bookSub: 'Een gesprek van 30 minuten waarin we samen kijken hoe jij meer leads klant kunt maken. Vrijblijvend en concreet.',
+    bookDur: '30 min',
+    bookVia: 'Online via videocall',
+    bookWith: 'met Jori Veldhuisen',
+    footerSub: 'Zet meer leads om in klanten',
+    footerCopy: '© 2026 Studio Your AI ' + MD + ' Panicale, Italië',
+    footerContact: 'Contact',
+    footerLinkedin: 'LinkedIn',
+  },
+  en: {
+    heroVariant: 'Turn more leads<br>into clients',
+    heroSub: "AI that does the work: a website that wins clients, follow-up within 1 minute and processes that run smoothly. For small businesses that want to grow without working harder.",
+    heroCta: 'Book a free call ' + AR,
+    flowLabel: 'my approach ' + MD + ' from intro to result',
+    flowStages: [
+      { num: '01', title: 'Intro call' },
+      { num: '02', title: 'Analysis of your business' },
+      { num: '03', title: 'Plan of action' },
+      { num: '04', title: 'Tailored build' },
+      { num: '05', title: 'Result: more clients' },
+    ],
+    probKicker: 'for whom ' + MD + ' SMEs and small businesses',
+    probTitle: 'Your leads go cold<br>before you reply',
+    probBody: "Leads do come in, but you're short on resources. Your follow-up falls short, so quotes sit too long, leads go cold and you lose revenue. Such a shame.",
+    probBody2: "What if this whole process were automated? So you follow up on every lead within 1 minute, while freeing up time for other things.",
+    probPunch: "Are you ready to win more clients, without having to work hard for it?",
+    probCta: 'Book a free call ' + AR,
+    aanpakKicker: 'how we work together',
+    aanpakTitle: 'My approach',
+    steps: [
+      { num: '01', title: 'Intro call', body: 'A no-strings call: are we a fit and what can I do for you?' },
+      { num: '02', title: 'Analysis', body: 'I dive into your situation and business, and map out your sales process.' },
+      { num: '03', title: 'Plan of action', body: 'A concrete plan: what we automate, in what order and what it delivers.' },
+      { num: '04', title: 'Build', body: 'I build the solution tailored to you, in your style, up and running.' },
+      { num: '05', title: 'Result', body: 'It works and you see it: more clients, less manual work.' },
+    ],
+    aanpakTags: ["A website that wins clients", "Follow-up within 24 hours", "Processes that don't stall"],
+    dienstenLabel: 'what you get',
+    caseKicker: 'proof ' + MD + ' real projects',
+    caseTitle: 'Case studies',
+    caseIntro: 'Real projects I worked on, across different industries.',
+    casePromiseLabel: 'the promise',
+    casePromise: '"A reply to every lead within 24 hours."',
+    caseBranche: 'Industry ' + MD + ' Art transport',
+    caseName: 'Wall to Wall<br>Art Solutions',
+    caseScopeLabel: 'Scope',
+    caseScope: 'AI Sales Agent in N8N',
+    caseDesc: 'An AI agent that automatically answers new art-transport requests as a draft email, in the exact tone of voice of Wall to Wall. It smartly collects all the information needed for a quote, so the team replies within 24 hours instead of days.',
+    caseStats: [
+      { num: '< 24 hrs', label: 'response time, was days' },
+      { num: '6 hrs', label: 'saved per week' },
+    ],
+    testimonialQuote: '"Jori improved and automated our sales process in a short time, giving us more time to focus on bringing in new clients."',
+    testimonialName: 'Merijn',
+    testimonialCompany: 'Wall to Wall Art Solutions',
+    case2Branche: 'Industry ' + MD + ' Coaching',
+    case2Name: 'Live Wise<br>Studio',
+    case2Intro: 'Re-engaged inactive clients with targeted outreach and simplified the process behind the scenes.',
+    case2Scope: 'Online activation tool + content flow',
+    case2Desc: 'Live Wise Studio offers tailor-made nutrition plans and coaching, from breakfast to dinner. A large group of inactive clients was re-engaged with targeted, relevant content and the process behind the scenes was simplified, growing the number of active clients.',
+    case2Stat: { num: '+10%', label: 'active clients' },
+    reviewCtaText: 'Curious what this could do for your business?',
+    reviewCtaBtn: 'Want more clients too? ' + AR,
+    aboutKicker: 'about me',
+    aboutTitle: "I'm Jori",
+    aboutBody: "Are you a small business owner? Then I help you turn more leads into clients. AI and smart processes are the means, not the goal. My passion is making the work of both you and your team more enjoyable and efficient, so you can grow and free up more time for the fun things. As an improvement consultant I learned one thing: understand the problem first, choose the tool second. Because delivering real results matters to me, I don't charge by the hour but for the results I deliver.",
+    aboutTags: ['Decisive', 'Results-driven', 'Straightforward'],
+    ctaTitle: 'Ready to turn more<br>leads into clients?',
+    ctaSub: "A 30-minute call, no strings attached. You'll know exactly how to turn more leads into clients.",
+    ctaBtn: 'Book a free call ' + AR,
+    bookKicker: 'book your call ' + MD + ' no strings attached',
+    bookTitle: 'Pick a moment',
+    bookSub: 'A 30-minute call in which we look together at how you can turn more leads into clients. No strings attached, just concrete.',
+    bookDur: '30 min',
+    bookVia: 'Online via video call',
+    bookWith: 'with Jori Veldhuisen',
+    footerSub: 'Turn more leads into clients',
+    footerCopy: '© 2026 Studio Your AI ' + MD + ' Panicale, Italy',
+    footerContact: 'Contact',
+    footerLinkedin: 'LinkedIn',
+  }
+};
+
+/* ── LANGUAGE ──────────────────────────────────────────────────── */
+let lang = localStorage.getItem('sya-lang') || 'nl';
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('sya-lang', l);
+  document.documentElement.lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === l));
+  render();
+}
+
+function render() {
+  const c = COPY[lang];
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const v = c[el.dataset.i];
+    if (v !== undefined) el.textContent = v;
+  });
+  document.querySelectorAll('[data-ihtml]').forEach(el => {
+    const v = c[el.dataset.ihtml];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  renderLeadFlow(c);
+  renderSteps(c);
+  renderTags(c);
+  renderStats(c);
+  renderAboutTags(c);
+  renderBookingMeta(c);
+}
+
+/* ── LEAD-FLOW ─────────────────────────────────────────────────── */
+function renderLeadFlow(c) {
+  const el = document.getElementById('lf-stages');
+  if (!el) return;
+  el.innerHTML = '';
+  c.flowStages.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'lf-card lf-s' + i;
+    card.innerHTML = '<div class="lf-num">' + s.num + '</div><div class="lf-title">' + s.title + '</div>';
+    el.appendChild(card);
+    if (i < c.flowStages.length - 1) {
+      const conn = document.createElement('div');
+      conn.className = 'lf-conn lf-c' + i;
+      conn.innerHTML = '<div class="bar"></div>';
+      el.appendChild(conn);
+    }
+  });
+}
+
+/* ── STEPS ─────────────────────────────────────────────────────── */
+function renderSteps(c) {
+  const g = document.getElementById('steps-grid');
+  if (!g) return;
+  g.innerHTML = '';
+  c.steps.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'step';
+    d.innerHTML = '<div class="step-num">' + s.num + '</div>' +
+      '<div class="step-title">' + s.title + '</div>' +
+      '<div class="step-body">' + s.body + '</div>' +
+      (i < c.steps.length - 1 ? '<span class="step-arrow">→</span>' : '');
+    g.appendChild(d);
+  });
+}
+
+/* ── TAGS ──────────────────────────────────────────────────────── */
+function renderTags(c) {
+  const w = document.getElementById('tags-wrap');
+  if (!w) return;
+  w.innerHTML = '';
+  c.aanpakTags.forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'tag';
+    s.innerHTML = '<span class="dot dot-a"></span>' + t;
+    w.appendChild(s);
+  });
+}
+
+/* ── STATS ─────────────────────────────────────────────────────── */
+function renderStats(c) {
+  const s1 = document.getElementById('case-stats-1');
+  if (s1) {
+    s1.innerHTML = '';
+    c.caseStats.forEach(st => {
+      s1.innerHTML += '<div><div class="stat-num">' + st.num + '</div><div class="stat-lbl">' + st.label + '</div></div>';
+    });
+  }
+  const s2 = document.getElementById('case-stats-2');
+  if (s2) {
+    s2.innerHTML = '<div><div class="stat-num">' + c.case2Stat.num + '</div><div class="stat-lbl">' + c.case2Stat.label + '</div></div>';
+  }
+}
+
+/* ── ABOUT TAGS ────────────────────────────────────────────────── */
+function renderAboutTags(c) {
+  const w = document.getElementById('about-tags');
+  if (!w) return;
+  w.innerHTML = '';
+  c.aboutTags.forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'about-tag';
+    s.textContent = t;
+    w.appendChild(s);
+  });
+}
+
+/* ── BOOKING META ──────────────────────────────────────────────── */
+function renderBookingMeta(c) {
+  const w = document.getElementById('booking-meta');
+  if (!w) return;
+  w.innerHTML = '';
+  [c.bookDur, c.bookVia, c.bookWith].forEach(t => {
+    w.innerHTML += '<span class="booking-meta-item"><span class="dot dot-a"></span>' + t + '</span>';
+  });
+}
+
+/* ── N8N FLOW ──────────────────────────────────────────────────── */
+function renderN8N() {
+  const svg = document.getElementById('n8n-svg');
+  const canvas = document.getElementById('n8n-canvas');
+  if (!svg || !canvas) return;
+
+  const W = 130, H = 58;
+  const nodes = [
+    { x: 16,  y: 31, label: 'Gmail Trigger', sub: 'Nieuwe mail ontvangen', color: '#EA4335', icon: 'G' },
+    { x: 196, y: 31, label: 'Filter',        sub: 'Transport aanvraag?',   color: '#F5A623', icon: 'IF' },
+    { x: 376, y: 31, label: 'AI Agent',      sub: 'Genereer concept',      color: '#9B59B6', icon: 'AI' },
+    { x: 556, y: 31, label: 'Gmail',         sub: 'Draft opslaan',         color: '#EA4335', icon: 'G' },
+  ];
+
+  // SVG paths
+  let svgHTML = '';
+  nodes.slice(0, -1).forEach((a, i) => {
+    const x1 = a.x + W, y1 = a.y + H / 2;
+    const x2 = nodes[i + 1].x, y2 = nodes[i + 1].y + H / 2;
+    const mx = (x1 + x2) / 2;
+    svgHTML += '<path d="M' + x1 + ',' + y1 + ' C' + mx + ',' + y1 + ' ' + mx + ',' + y2 + ' ' + x2 + ',' + y2 + '" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" fill="none"/>';
+    svgHTML += '<circle cx="' + nodes[i+1].x + '" cy="' + (nodes[i+1].y + H/2) + '" r="3" fill="rgba(255,255,255,0.25)"/>';
+  });
+  svg.innerHTML = svgHTML;
+
+  // Nodes
+  nodes.forEach((node, i) => {
+    const div = document.createElement('div');
+    div.className = 'n8n-node';
+    div.style.left = node.x + 'px';
+    div.style.top = node.y + 'px';
+    div.innerHTML =
+      '<div class="n8n-icon" style="background:' + node.color + '">' + node.icon + '</div>' +
+      '<div><div class="n8n-lbl">' + node.label + '</div><div class="n8n-sub">' + node.sub + '</div></div>' +
+      '<div class="n8n-port n8n-port-r"></div>' +
+      (i > 0 ? '<div class="n8n-port n8n-port-l"></div>' : '');
+    canvas.appendChild(div);
+  });
+}
+
+/* ── CAL.COM ────────────────────────────────────────────────────── */
+function initCal() {
+  (function (C, A, L) {
+    var p = function (a, ar) { a.q.push(ar); };
+    var d = C.document;
+    C.Cal = C.Cal || function () {
+      var cal = C.Cal; var ar = arguments;
+      if (!cal.loaded) {
+        cal.ns = {}; cal.q = cal.q || [];
+        d.head.appendChild(d.createElement('script')).src = A;
+        cal.loaded = true;
       }
+      if (ar[0] === L) {
+        var api = function () { p(api, arguments); };
+        var ns = ar[1]; api.q = api.q || [];
+        if (typeof ns === 'string') { cal.ns[ns] = cal.ns[ns] || api; p(cal.ns[ns], ar); p(cal, ['initNamespace', ns]); }
+        else p(cal, ar);
+        return;
+      }
+      p(cal, ar);
     };
+  })(window, 'https://app.cal.com/embed/embed.js', 'init');
 
-    /* ─── SHARED STYLES ─── */
-    const TC = 'rgb(196,89,60)';
-    const DARK = 'rgb(37,37,37)';
-    const BG = 'rgb(241,240,238)';
+  Cal('init', 'intake', { origin: 'https://cal.com' });
+  Cal.ns['intake']('inline', {
+    elementOrSelector: '#cal-inline',
+    config: { layout: 'month_view', theme: 'light' },
+    calLink: 'jori-veldhuisen-xcj0j8/intake-studio-your-ai',
+  });
+  Cal.ns['intake']('ui', {
+    hideEventTypeDetails: false,
+    layout: 'month_view',
+    cssVarsPerTheme: { light: { 'cal-brand': '#C4593C' } },
+  });
+}
 
-    const btnPrimary = {
-      fontFamily: "'Oxanium', sans-serif", fontSize: 16, fontWeight: 800,
-      letterSpacing: '0.04em', textTransform: 'uppercase',
-      background: TC, color: BG,
-      border: `2px solid ${TC}`, borderRadius: 4,
-      padding: '16px 32px', cursor: 'pointer', textDecoration: 'none',
-      display: 'inline-block', transition: 'background 0.3s ease, color 0.3s ease',
-    };
-    const btnGhost = {
-      fontFamily: "'Oxanium', sans-serif", fontSize: 16, fontWeight: 800,
-      letterSpacing: '0.04em', textTransform: 'uppercase',
-      background: 'transparent', color: DARK,
-      border: `2px solid ${DARK}`, borderRadius: 4,
-      padding: '16px 32px', cursor: 'pointer', textDecoration: 'none',
-      display: 'inline-block', transition: 'background 0.3s ease, color 0.3s ease',
-    };
-
-    function Dot() {
-      return <div style={{ width: 4, height: 4, borderRadius: '50%', background: DARK, flexShrink: 0 }} />;
-    }
-
-    /* ─── NAVBAR ─── */
-    function NavBar({ lang, setLang }) {
-      return (
-        <div className="nav-wrap" style={{ position: 'fixed', top: 16, left: 0, right: 0, zIndex: 200, display: 'flex', justifyContent: 'center', padding: '0 28px', pointerEvents: 'none' }}>
-          <nav className="nav-pill" style={{
-            pointerEvents: 'all', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            width: '100%',
-            background: 'rgba(191,191,191,0.45)',
-            backdropFilter: 'blur(30px)', WebkitBackdropFilter: 'blur(30px)',
-            borderRadius: 32, padding: '10px 20px'
-          }}>
-            <a href="javascript:void(0)" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-              <span style={{
-                fontFamily: "'Oxanium', sans-serif", fontWeight: 800,
-                fontSize: 15, letterSpacing: '0.06em', textTransform: 'uppercase',
-                color: DARK, lineHeight: 1,
-              }}>Studio Your AI</span>
-            </a>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-              {['en','nl'].map((l, i) => (
-                <React.Fragment key={l}>
-                  {i > 0 && <span style={{ fontSize: 10, color: '#bbb' }}>|</span>}
-                  <button onClick={() => setLang(l)} style={{
-                    fontFamily: "'Space Mono', monospace", fontSize: 11, letterSpacing: '0.06em',
-                    background: 'none', border: `1px solid ${lang === l ? DARK : 'transparent'}`,
-                    cursor: 'pointer', padding: '2px 7px', color: lang === l ? DARK : '#888',
-                    borderRadius: 4, transition: 'all .15s'
-                  }}>{l.toUpperCase()}</button>
-                </React.Fragment>
-              ))}
-              <span className="nav-menu-label" style={{ fontFamily: "'Space Mono', monospace", fontSize: 12, letterSpacing: '0.04em', color: DARK, cursor: 'pointer' }}>
-                Menu
-              </span>
-            </div>
-          </nav>
-        </div>
-      );
-    }
-
-    /* ─── HERO ─── */
-    function HeroSection({ lang, copy }) {
-      const c = copy[lang];
-      return (
-        <section style={{ padding: '24px 28px 32px', display: 'flex', flexDirection: 'column', gap: 0 }}>
-          <h1 style={{
-            fontFamily: "'Oxanium', sans-serif", fontWeight: 800,
-            fontSize: 'clamp(60px, 11.5vw, 140px)', lineHeight: 0.88,
-            letterSpacing: '-0.01em', textTransform: 'uppercase',
-            color: DARK, transform: 'scaleX(1.07)', transformOrigin: 'left',
-          }} dangerouslySetInnerHTML={{ __html: c.heroTitle }} />
-
-          <p style={{ maxWidth: 560, fontSize: 15, lineHeight: 1.7, color: 'rgba(37,37,37,0.75)', paddingTop: 16 }}>
-            {c.heroSub}
-          </p>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginTop: 20 }}>
-            <a href="#diensten" style={btnPrimary}>{c.ctaDiensten}</a>
-            <a href="javascript:void(0)" style={btnGhost}>{c.ctaGesprek}</a>
-          </div>
-        </section>
-      );
-    }
-
-    /* ─── DIENSTEN ─── */
-    function DienstenSection({ lang, copy }) {
-      const c = copy[lang];
-      const diensten = [
-        { num: '01', title: c.d1Title, desc: c.d1Desc },
-        { num: '02', title: c.d2Title, desc: c.d2Desc },
-        { num: '03', title: c.d3Title, desc: c.d3Desc },
-      ];
-      return (
-        <section id="diensten" style={{ borderTop: '1px solid rgba(37,37,37,0.15)', padding: '48px 28px' }}>
-          <div style={{ fontSize: 11, letterSpacing: '0.06em', textTransform: 'lowercase', color: 'rgba(37,37,37,0.5)', marginBottom: 32 }}>
-            {c.dienstenLabel}
-          </div>
-
-          <div className="diensten-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
-            {diensten.map((d, i) => (
-              <div key={i} className="diensten-item-inner" style={{
-                borderTop: `2px solid ${TC}`,
-                padding: '24px 28px 24px 0',
-                ...(i > 0 ? { paddingLeft: 28, borderLeft: '1px solid rgba(37,37,37,0.15)' } : {})
-              }}>
-                <div style={{ fontFamily: "'Oxanium',sans-serif", fontSize: 11, letterSpacing: '0.08em', color: 'rgba(37,37,37,0.4)', marginBottom: 12 }}>{d.num}</div>
-                <div style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(18px,2vw,26px)', lineHeight: 1.1, textTransform: 'uppercase', color: DARK, marginBottom: 12 }}
-                  dangerouslySetInnerHTML={{ __html: d.title }} />
-                <div style={{ fontSize: 12, lineHeight: 1.75, color: 'rgba(37,37,37,0.65)' }}>{d.desc}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Result stat */}
-          <div style={{ marginTop: 32, borderTop: '1px solid rgba(37,37,37,0.15)', paddingTop: 20, display: 'flex', alignItems: 'baseline', gap: 12 }}>
-            <span style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(28px,4vw,48px)', lineHeight: 1, color: TC }}>{c.resultNum}</span>
-            <span style={{ fontSize: 12, color: 'rgba(37,37,37,0.6)' }}>{c.resultText}</span>
-          </div>
-
-          {/* Testimonial */}
-          <div style={{ marginTop: 40, borderTop: `2px solid ${TC}`, paddingTop: 28 }}>
-            <blockquote style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(18px,2.2vw,28px)', lineHeight: 1.35, color: DARK }}>
-              {c.testimonialQuote}
-            </blockquote>
-            <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, letterSpacing: '0.06em', color: 'rgba(37,37,37,0.5)' }}>
-              <strong style={{ color: DARK }}>Merijn</strong>
-              <Dot />
-              <span>{c.testimonialCompany}</span>
-            </div>
-          </div>
-        </section>
-      );
-    }
-
-    /* ─── N8N FLOW ─── */
-    function N8NFlow() {
-      const W = 130, H = 58;
-      const nodes = [
-        { x: 16,  y: 31, label: 'Gmail Trigger', sub: 'Nieuwe mail ontvangen', color: '#EA4335', icon: 'G' },
-        { x: 196, y: 31, label: 'Filter',         sub: 'Transport aanvraag?',   color: '#F5A623', icon: 'IF' },
-        { x: 376, y: 31, label: 'AI Agent',       sub: 'Genereer concept',       color: '#9B59B6', icon: 'AI' },
-        { x: 556, y: 31, label: 'Gmail',          sub: 'Draft opslaan',          color: '#EA4335', icon: 'G' },
-      ];
-      const conns = nodes.slice(0, -1).map((a, i) => {
-        const x1 = a.x + W, y1 = a.y + H / 2;
-        const x2 = nodes[i + 1].x, y2 = nodes[i + 1].y + H / 2;
-        const mx = (x1 + x2) / 2;
-        return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
-      });
-      return (
-        <div className="n8n-outer">
-        <div className="n8n-inner" style={{
-          position: 'relative', height: 120, borderRadius: 8, overflow: 'hidden',
-          background: '#14121e',
-          backgroundImage: 'radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)',
-          backgroundSize: '22px 22px',
-        }}>
-          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} viewBox="0 0 700 120" preserveAspectRatio="xMidYMid meet">
-            {conns.map((d, i) => (
-              <React.Fragment key={i}>
-                <path d={d} stroke="rgba(255,255,255,0.18)" strokeWidth="1.5" fill="none" />
-                <circle cx={nodes[i+1].x} cy={nodes[i+1].y + H/2} r="3" fill="rgba(255,255,255,0.25)" />
-              </React.Fragment>
-            ))}
-          </svg>
-          {nodes.map((node, i) => (
-            <div key={i} style={{
-              position: 'absolute', left: node.x, top: node.y,
-              width: W, height: H,
-              background: 'rgba(26,24,40,0.97)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: 8, padding: '8px 10px',
-              display: 'flex', alignItems: 'center', gap: 8,
-              boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
-            }}>
-              <div style={{
-                width: 30, height: 30, borderRadius: '50%',
-                background: node.color,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                flexShrink: 0, fontSize: 10, color: 'white', fontWeight: 700,
-              }}>{node.icon}</div>
-              <div>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.85)', marginBottom: 2, fontFamily: "'Space Mono', monospace" }}>{node.label}</div>
-                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', fontFamily: "'Space Mono', monospace", lineHeight: 1.3 }}>{node.sub}</div>
-              </div>
-              <div style={{ position: 'absolute', right: -5, top: '50%', transform: 'translateY(-50%)', width: 9, height: 9, borderRadius: '50%', background: '#2d2b3e', border: '1.5px solid rgba(255,255,255,0.25)' }} />
-              {i > 0 && <div style={{ position: 'absolute', left: -5, top: '50%', transform: 'translateY(-50%)', width: 9, height: 9, borderRadius: '50%', background: '#2d2b3e', border: '1.5px solid rgba(255,255,255,0.25)' }} />}
-            </div>
-          ))}
-        </div>
-        </div>
-      );
-    }
-
-    /* ─── CASE ─── */
-    function CaseSection({ lang, copy }) {
-      const c = copy[lang];
-      return (
-        <>
-          <div style={{ borderTop: '1px solid rgba(37,37,37,0.15)', padding: '28px 28px 0' }}>
-            <div style={{ fontSize: 11, letterSpacing: '0.06em', textTransform: 'lowercase', color: 'rgba(37,37,37,0.5)', marginBottom: 24 }}>
-              {lang === 'nl' ? 'een voorbeeld uit de praktijk' : 'a practical example'}
-            </div>
-          </div>
-          <div style={{ padding: '0 28px 36px' }}>
-            <div className="case-meta" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 24, alignItems: 'start', marginBottom: 20 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <div style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(24px,3vw,42px)', lineHeight: 1, textTransform: 'uppercase', color: DARK }}
-                  dangerouslySetInnerHTML={{ __html: c.c1Name }} />
-                <div style={{ fontSize: 11, letterSpacing: '0.04em', color: DARK, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                  <span>{c.c1ScopeLabel}</span><Dot /><span>({c.c1Scope})</span>
-                </div>
-                <div style={{ fontSize: 12, lineHeight: 1.7, color: 'rgba(37,37,37,0.7)', maxWidth: 480 }}>{c.c1Desc}</div>
-              </div>
-              <div className="case-stat" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
-                <span style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(28px,3vw,44px)', lineHeight: 1, color: TC }}>{c.c1StatNum}</span>
-                <span style={{ fontSize: 11, letterSpacing: '0.04em', color: 'rgba(37,37,37,0.6)', textAlign: 'right' }}>{c.c1StatLabel}</span>
-              </div>
-            </div>
-            <N8NFlow />
-          </div>
-        </>
-      );
-    }
-
-    /* ─── OVERVIEW ─── */
-    function OverviewSection({ lang, copy }) {
-      const c = copy[lang];
-      const rows = [
-        { title: c.ov1Title, body: c.ov1Body },
-        { title: c.ov2Title, body: c.ov2Body },
-        { title: c.ov3Title, body: c.ov3Body },
-        { title: c.ov4Title, body: c.ov4Body, photo: true },
-        { title: c.ov5Title, body: c.ov5Body },
-        { title: c.ov6Title, body: c.ov6Body },
-      ];
-      return (
-        <section className="overview-outer" style={{ borderTop: '1px solid rgba(37,37,37,0.15)', padding: '40px 28px 80px', display: 'grid', gridTemplateColumns: '140px 1fr', gap: '0 32px' }}>
-          <div className="overview-label-col">
-            <div style={{ fontSize: 11, letterSpacing: '0.06em', textTransform: 'lowercase', color: DARK, paddingTop: 4 }}>{c.ovLabel}</div>
-          </div>
-          <div>
-            {rows.map((row, i) => (
-              <div key={i} className="overview-row" style={{
-                borderTop: '1px solid rgba(37,37,37,0.15)',
-                padding: '24px 0',
-                display: 'grid',
-                gridTemplateColumns: row.photo ? '260px 1fr 200px' : '260px 1fr',
-                gap: 24,
-                alignItems: 'start',
-                ...(i === rows.length - 1 ? { borderBottom: '1px solid rgba(37,37,37,0.15)' } : {})
-              }}>
-                <div style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(22px,3vw,38px)', lineHeight: 1, textTransform: 'lowercase', color: DARK }}>{row.title}</div>
-                <div style={{ fontSize: 13, lineHeight: 1.75, color: DARK, maxWidth: 480 }} dangerouslySetInnerHTML={{ __html: row.body }} />
-                {row.photo && (
-                  <div className="overview-photo" style={{ borderRadius: 8, overflow: 'hidden', aspectRatio: '3/4', background: '#d0cdc8' }}>
-                    <img src="jori-veldhuisen.jpeg" alt="Jori Veldhuisen" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      );
-    }
-
-    /* ─── FOOTER ─── */
-    function Footer({ lang, copy }) {
-      const c = copy[lang];
-      return (
-        <footer style={{ background: TC, color: BG, padding: '40px 28px 32px' }}>
-          <div style={{ fontFamily: "'Oxanium',sans-serif", fontWeight: 800, fontSize: 'clamp(28px,5.5vw,72px)', lineHeight: 1, textTransform: 'uppercase', transform: 'scaleX(1.07)', transformOrigin: 'left', display: 'inline-block' }}>
-            Studio Your AI
-          </div>
-          <div style={{ fontSize: 11, color: 'rgba(241,240,238,0.65)', marginTop: 8, letterSpacing: '0.05em' }}>{c.footerSub}</div>
-          <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid rgba(241,240,238,0.25)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, color: 'rgba(241,240,238,0.6)', letterSpacing: '0.05em', flexWrap: 'wrap', gap: 12 }}>
-            <span>{c.footerCopy}</span>
-            <div style={{ display: 'flex', gap: 24 }}>
-              <a href="javascript:void(0)" style={{ color: 'rgba(241,240,238,0.6)', textDecoration: 'none' }}
-                onMouseEnter={e => e.target.style.color = BG}
-                onMouseLeave={e => e.target.style.color = 'rgba(241,240,238,0.6)'}>LinkedIn</a>
-              <a href="javascript:void(0)" style={{ color: 'rgba(241,240,238,0.6)', textDecoration: 'none' }}
-                onMouseEnter={e => e.target.style.color = BG}
-                onMouseLeave={e => e.target.style.color = 'rgba(241,240,238,0.6)'}>{c.footerContact}</a>
-            </div>
-          </div>
-        </footer>
-      );
-    }
-
-    /* ─── APP ─── */
-    function App() {
-      const saved = localStorage.getItem('sya-lang');
-      const [lang, setLang] = React.useState(saved || 'nl');
-
-      React.useEffect(() => {
-        localStorage.setItem('sya-lang', lang);
-        document.documentElement.lang = lang;
-      }, [lang]);
-
-      return (
-        <div>
-          <NavBar lang={lang} setLang={setLang} />
-          <HeroSection lang={lang} copy={COPY} />
-          <DienstenSection lang={lang} copy={COPY} />
-          <CaseSection lang={lang} copy={COPY} />
-          <OverviewSection lang={lang} copy={COPY} />
-          <Footer lang={lang} copy={COPY} />
-        </div>
-      );
-    }
-
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-  </script>
+/* ── INIT ───────────────────────────────────────────────────────── */
+document.documentElement.lang = lang;
+document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+document.addEventListener('DOMContentLoaded', function () {
+  render();
+  renderN8N();
+  initCal();
+});
+</script>
 </body>
 </html>
